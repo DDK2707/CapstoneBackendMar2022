@@ -29,6 +29,10 @@ const userSchema = new mongoose.Schema ({
         type: String, 
         default: ""
     },
+    about: {
+        type: String,
+        default: ""
+    },
     followers: {
         type: Array,
         default: []
@@ -40,6 +44,22 @@ const userSchema = new mongoose.Schema ({
     isAdmin: {
         type: Boolean,
         default: false
+    },
+    description: {
+        type: String,
+        max: 15
+    },
+    city: {
+        type: String,
+        max: 30
+    },
+    from: {
+        type: String, 
+        max: 50
+    },
+    signed: {
+        type: Number,
+        enum: [1,2,3]
     }
 },
 {timestamps: true}
