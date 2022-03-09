@@ -7,7 +7,7 @@ const morgan = require("morgan")
 
 const userRoute = require("./routes/userRoute");
 const postRoute = require("./routes/postRoute");
-const authRoute = require("./routes/authRoute")
+const authRoute = require("./routes/auth")
 
 dotenv.config();
 

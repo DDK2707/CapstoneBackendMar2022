@@ -36,7 +36,13 @@ const userSchema = new mongoose.Schema ({
     following: {
         type: Array,
         default: []
+    }, 
+    isAdmin: {
+        type: Boolean,
+        default: false
     }
-});
+},
+{timestamps: true}
+);
 
 module.exports = mongoose.model("Users", userSchema)
