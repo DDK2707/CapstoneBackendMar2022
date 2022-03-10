@@ -29,10 +29,6 @@ const userSchema = new mongoose.Schema ({
         type: String, 
         default: ""
     },
-    about: {
-        type: String,
-        default: ""
-    },
     followers: {
         type: Array,
         default: []
@@ -45,9 +41,17 @@ const userSchema = new mongoose.Schema ({
         type: Boolean,
         default: false
     },
+    isProducer: {
+        type: Boolean,
+        default: false
+    },
+    isExec: {
+        type: Boolean,
+        default: false
+    },
     description: {
         type: String,
-        max: 15
+        max: 60
     },
     city: {
         type: String,
