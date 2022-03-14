@@ -70,17 +70,19 @@ router.get("/:id", async(req, res) =>{
 
 //get timeline 
 router.get("/timeline", async (req, res) =>{
-    try {
-        const currentUser = await User.findById(req.body.userId);
-        const userPosts = await Post.find({ userId: currentUser._id});
-        const followingPosts = await Promise.all(
-            currentUser.following.map(followingId=>{
-                Post.find({userId: followingId})
-            })
-        );
-        res.json(userPosts.concat(...followingPosts))
-    } catch(err){
-        res.status(500).json(err)
+    if (id.match(currentuser._id)) {
+        try {
+            const currentUser = await User.findById(req.body.userId);
+            const userPosts = await Post.find({ userId: currentUser._id});
+            const followingPosts = await Promise.all(
+                currentUser.following.map(followingId=>{
+                    Post.find({userId: followingId})
+                })
+            );
+            res.json(userPosts.concat(...followingPosts))
+        } catch(err){
+            res.status(500).json(err)
+        }
     }
 })
 
