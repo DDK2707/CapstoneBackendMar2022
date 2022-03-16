@@ -1,8 +1,9 @@
 const router = require("express").Router();
+const auth = require("../config/auth")
 const Post = require("../models/postModel");
 
 //create post
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
     const newPost = new Post(req.body)
     try{
         const savedPost = await newPost.save();
@@ -13,7 +14,7 @@ router.post("/", async (req, res) => {
 })
 
 //update post
-router.put("/:id", async(req, res) =>{
+router.put("/:id", auth, async(req, res) =>{
     const post = await Post.findById(req.params.id);
     try {
         if(post.userId === req.body.userId){
@@ -28,7 +29,7 @@ router.put("/:id", async(req, res) =>{
 })
 
 //delete post
-router.delete("/:id", async(req, res) => {
+router.delete("/:id", auth, async(req, res) => {
     try {
         const post = await Post.findById(req.params.id);
         if (post.userId === req.body.userId) {
@@ -70,7 +71,7 @@ router.get("/:id", async(req, res) =>{
 
 //get timeline 
 router.get("/timeline", async (req, res) =>{
-    if (id.match(currentuser._id)) {
+    if (id.match(/^[0-9a-fA-F]{24}$/)) {
         try {
             const currentUser = await User.findById(req.body.userId);
             const userPosts = await Post.find({ userId: currentUser._id});

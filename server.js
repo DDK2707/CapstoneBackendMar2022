@@ -1,30 +1,31 @@
+require("dotenv").config();
+
 const express = require("express");
-const app = express()
 const mongoose = require("mongoose");
-const helmet = require("helmet");
-const dotenv = require("dotenv");
-const morgan = require("morgan")
-
+const cors = require("cors");
 const userRoute = require("./routes/userRoute");
-const postRoute = require("./routes/postRoute");
-const authRoute = require("./routes/auth")
+const postRoute = require ("./routes/postRoute");
 
-dotenv.config();
-
-mongoose.connect(process.env.DB_URL, {useNewUrlParser: true}, () => {
-    console.log("Connected to Database")
+//set up MongoDB connection
+mongoose.connect(process.env.DB_URL, {
+    useNewUrlParser: true
 });
+const db = mongoose.connection;
+db.on("error", (error) => console.log(error));
+db.once("open", () => console.log("Connected to database"));
 
-//middleware
+//configure Express app
+const app = express();
+app.set("port", process.env.PORT || 7500);
 app.use(express.json());
-app.use(helmet());
-app.use(morgan("common"))
+app.use(cors());
 
 app.use("/api/users", userRoute)
-app.use("/api/auth", authRoute)
 app.use("/api/posts", postRoute)
+// app.use("/api/comment", commentRoute)
 
 
-app.listen(7500,() => {
-    console.log("Server is running")
+app.listen(app.get("port"), (server) => {
+    console.info(`Server is listening on port ${app.get("port")}`);
+    console.info("Press CTRL + C to close the server")
 })

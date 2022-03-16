@@ -1,6 +1,9 @@
+require("dotenv").config();
+const express = require("express")
 const User = require("../models/userModel")
 const router = require("express").Router();
-const bcrypt = require("bcrypt")
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken")
 
 
 //get single
@@ -13,6 +16,56 @@ router.get("/:id", async (req, res) => {
         res.status(500).json(err)
     }
 })
+
+//REGISTER A USER   
+router.post("/register", async(req, res) => {
+    try{
+        //generate bcrypt password
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(req.body.password, salt);
+
+        //create user
+        const newUser = new User({
+            username: req.body.username,
+            email: req.body.email,
+            password: hashedPassword
+        });
+
+        //save user and respond
+        const user = await newUser.save()
+        res.status(200).json(user)
+    }catch (err){
+        console.log(err)
+    }
+})
+
+//USER LOGIN
+router.post("/login", async(req, res, next) => {
+    const {
+        email,
+        password
+    } = req.body;
+    const user = await User.findOne({ email });
+    
+    if (!user) res.status(404).json({message: "Could not find user"});
+    if (await bcrypt.compare(password, user.password)) {
+        try {
+            const access_token = jwt.sign(
+                JSON.stringify(user),
+                process.env.ACCESS_TOKEN_SECRET
+            );
+            res.status(201).json({
+                jwt: access_token
+            });
+        }catch (error) {
+            res.status(500).json({
+                message: error.message
+            });
+        }
+    } else {
+        res.status(400).json({ message: "Recheck login details. Email and password do not match"});
+    }
+});
 
 //update user
  router.put("/:id", async (req, res) => {
