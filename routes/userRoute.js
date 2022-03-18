@@ -3,7 +3,23 @@ require("dotenv").config();
 const User = require("../models/userModel")
 const router = require("express").Router();
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
+const app = require("./contactRoute");
+
+//get all
+router.get("/", async (req, res) =>{
+    try {
+        const users = await User.find();
+    res.status(200).json({
+        message: "Success",
+        results: users
+    })
+    } catch (error) {
+        res.status(500).send({
+            message: error.message
+        })
+    }
+})
 
 
 //get single

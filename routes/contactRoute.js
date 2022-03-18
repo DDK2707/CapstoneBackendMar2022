@@ -9,7 +9,7 @@ app.get('/', (req, res) => {
 });
 
 app.post('/', (req, res) => {
-    const {username, email, message, subject} = req.body
+    const {name, email, contact, message} = req.body
     var transporter = nodemailer.createTransport({
         service: 'gmail',
         host: "smtp.gmail.com",
@@ -24,8 +24,8 @@ app.post('/', (req, res) => {
     var mailOptions = {
         from: email,
         to: "ddk2707@gmail.com",
-        subject: `${subject}`,
-        text: `Name: ${username}
+        subject: `${contact}`,
+        text: `Name: ${name}
         Email: ${email}
         contacted you with this message: ${message}`
     };
